@@ -1,0 +1,6 @@
+[submodule "external/openssl"]
+	path = external/openssl
+	url = https://github.com/openssl/openssl.git
+[submodule "external/pqm4"]
+	path = external/pqm4
+	url = https://github.com/mupq/pqm4.git
