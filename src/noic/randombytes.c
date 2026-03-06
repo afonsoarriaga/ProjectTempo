@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -10,7 +12,6 @@
 #include <fcntl.h>
 #include <errno.h>
 #ifdef __linux__
-#define _GNU_SOURCE
 #include <unistd.h>
 #include <sys/syscall.h>
 #elif __NetBSD__

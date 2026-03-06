@@ -14,7 +14,7 @@ When referring to Tempo PAKE or this GitHub repository in academic literature, p
 ```
 @misc{cryptoeprint:2025/1399,
       author = {Afonso Arriaga and Manuel Barbosa and Stanislaw Jarecki},
-      title = {Tempo: {ML}-{KEM} to {PAKE} Compiler Resilient to Timing Attacks},
+      title = {Tempo: An {ML}-{KEM} to {PAKE} Compiler Resilient to Timing Attacks},
       howpublished = {Cryptology {ePrint} Archive, Paper 2025/1399},
       year = {2025},
       url = {https://eprint.iacr.org/2025/1399}
@@ -24,34 +24,39 @@ When referring to Tempo PAKE or this GitHub repository in academic literature, p
 ## Benchmarks on 64-bit x86 (x86_64) and ARM (aarch64)
 
 To compile and run the benchmarks:
-```
-% git clone https://github.com/afonsoarriaga/TempoPAKE.git
-% cd TempoPAKE
+```console
+% git clone https://github.com/afonsoarriaga/ProjectTempo.git
+% cd ProjectTempo
 % git submodule update --init --recursive
 % make
 % python3 main.py
 ```
 
 If you have a Mac M1, you can measure CPU cycles (instead of elapsed milliseconds) by running the following command instead (this is based on the work of [@ibireme](https://gist.github.com/ibireme/) and requires root privileges):
-```
+```console
 % sudo python3 main_count_cycles_mac_m1.py
+```
+
+If you have a Linux OS running on x86, use the following command:
+```console
+% python3 main_count_cycles_x86.py
 ```
 
 Results (on a MacBook Air M1, 2020):
 
 |                  |  Algorithm A0  |   Algorithm A1   |    Algorithm B0   |   Algorithm C0   |   Algorithm C1   |
 |------------------|---------------:|-----------------:|------------------:|-----------------:|-----------------:|
-| MLKEM-512.gen_a  |  20 796 cycles |   347 000 cycles |  2 493 390 cycles |   541 250 cycles |   171 401 cycles |
-| MLKEM-768.gen_a  |  43 371 cycles |   776 666 cycles |  5 605 677 cycles | 1 211 064 cycles |   381 841 cycles |
-| MLKEM-1024.gen_a |  77 542 cycles | 1 377 332 cycles |  9 962 866 cycles | 2 150 130 cycles |   676 883 cycles |
+| MLKEM-512.gen_a  |      0.0077 ms |        0.4504 ms |         0.7837 ms |        0.1710 ms |        0.0609 ms |
+| MLKEM-768.gen_a  |      0.0146 ms |        1.0075 ms |         1.7718 ms |        0.4481 ms |        0.1342 ms |
+| MLKEM-1024.gen_a |      0.0261 ms |        1.7997 ms |         3.1335 ms |        0.6843 ms |        0.2382 ms |
 |                  |                |                  |                   |                  |                  |
-| MLKEM-512        | 249 415 cycles | 1 212 835 cycles |  7 688 806 cycles | 1 792 566 cycles |   684 252 cycles |
-| MLKEM-768        | 411 684 cycles | 2 570 535 cycles | 17 077 331 cycles | 3 882 878 cycles | 1 389 138 cycles |
-| MLKEM-1024       | 630 139 cycles | 4 474 207 cycles | 30 229 976 cycles | 6 801 575 cycles | 2 368 664 cycles |
+| MLKEM-512        |      0.0902 ms |        1.4328 ms |         2.4261 ms |        0.5813 ms |        0.2454 ms |
+| MLKEM-768        |      0.1485 ms |        3.1401 ms |         5.4544 ms |        1.2506 ms |        0.5001 ms |
+| MLKEM-1024       |      0.2266 ms |        5.5491 ms |         9.7576 ms |        2.1966 ms |        0.8483 ms |
 |                  |                |                  |                   |                  |                  |
-| NoIC[MLKEM-512]  | 340 725 cycles | 1 621 402 cycles | 10 228 453 cycles | 2 401 830 cycles |   923 869 cycles |
-| NoIC[MLKEM-768]  | 546 484 cycles | 3 184 602 cycles | 20 993 196 cycles | 4 787 709 cycles | 1 740 766 cycles |
-| NoIC[MLKEM-1024] | 807 616 cycles | 5 301 191 cycles | 35 400 992 cycles | 8 005 898 cycles | 2 837 613 cycles |
+| NoIC[MLKEM-512]  |      0.1248 ms |        1.9081 ms |         3.2615 ms |        0.7846 ms |        0.3319 ms |
+| NoIC[MLKEM-768]  |      0.1965 ms |        3.8854 ms |         6.6772 ms |        1.6083 ms |        0.6232 ms |
+| NoIC[MLKEM-1024] |      0.2871 ms |        6.6271 ms |        11.2986 ms |        2.5864 ms |        1.0233 ms |
 
 Average cycle count: ML-KEM runs keygen+enc+dec; NoIC runs init+resp+end.
 
@@ -66,7 +71,7 @@ Average cycle count: ML-KEM runs keygen+enc+dec; NoIC runs init+resp+end.
 These instructions are for a Nucleo-L4R5ZI board connected to a laptop running MacOS 15.6.1.
 
 1. Download and install manually arm-gnu-toolchain-13.3.rel1-darwin-arm64-arm-none-eabi.pkg. Brew installs version 14.3.rel1 which doesn't work as of 26/09/2025.
-```
+```console
 % vim ~/.zshrc
 export PATH="/Applications/ArmGNUToolchain/13.3.rel1/arm-none-eabi/bin:$PATH"
 
@@ -80,31 +85,31 @@ This is free software; see the source for copying conditions.  There is NO
 warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ```
 2. Install OpenOCD to allow benchmarks.py to flash the compiled binaries
-```
+```console
 % brew install openocd
 ```
 3. Copy PAKEs to pqm4
-```
+```console
 % make copy-pakes
 ```
 4. Compile 
-```
+```console
 % cd external/pqm4
 % make -j4 PLATFORM=nucleo-l4r5zi
 ```
 5. Install Python dependences
-```
+```console
 % python3 -m venv venv
 % source venv/bin/activate
 % pip3 install -r requirements.txt
 ```
 6. Connect board
-```
+```console
 % ls /dev/tty.*
 /dev/tty.usbmodem1103
 ```
 7. Run benchmarks with 100 iterations
-```
+```console
 % python3 benchmarks.py -p nucleo-l4r5zi -u /dev/tty.usbmodem1103 -i 100 \
     ml-kem-512 ml-kem-768 ml-kem-1024 \
     noic-a0-mlkem512 noic-a0-mlkem768 noic-a0-mlkem1024 \

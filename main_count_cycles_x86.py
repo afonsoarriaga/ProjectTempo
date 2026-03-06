@@ -2,6 +2,7 @@
 import ctypes as C
 import os
 import statistics
+import rdtsc
 
 # ---------------------------------------------------------------------------
 # Global configuration
@@ -36,70 +37,13 @@ LIB_PATHS = [
 ]
 
 # ---------------------------------------------------------------------------
-# Count cycles on Mac M1, based on the work of @ibireme https://gist.github.com/ibireme/
+# Count cycles on x86 using RDTSC
 # ---------------------------------------------------------------------------
 
-KPERF_PATH = "/System/Library/PrivateFrameworks/kperf.framework/kperf"
-
-# kpc classes (from kpc_demo.c)
-KPC_CLASS_FIXED = 0
-KPC_CLASS_FIXED_MASK = 1 << KPC_CLASS_FIXED  # 1
-
-kperf = C.CDLL(KPERF_PATH)
-
-# int kpc_force_all_ctrs_get(int *val_out);
-kperf.kpc_force_all_ctrs_get.argtypes = [C.POINTER(C.c_int)]
-kperf.kpc_force_all_ctrs_get.restype = C.c_int
-
-# int kpc_force_all_ctrs_set(int val);
-kperf.kpc_force_all_ctrs_set.argtypes = [C.c_int]
-kperf.kpc_force_all_ctrs_set.restype = C.c_int
-
-# int kpc_set_counting(uint32_t classes);
-kperf.kpc_set_counting.argtypes = [C.c_uint32]
-kperf.kpc_set_counting.restype = C.c_int
-
-# int kpc_set_thread_counting(uint32_t classes);
-kperf.kpc_set_thread_counting.argtypes = [C.c_uint32]
-kperf.kpc_set_thread_counting.restype = C.c_int
-
-# uint32_t kpc_get_counter_count(uint32_t classes);
-kperf.kpc_get_counter_count.argtypes = [C.c_uint32]
-kperf.kpc_get_counter_count.restype = C.c_uint32
-
-# int kpc_get_thread_counters(uint32_t tid, uint32_t buf_count, uint64_t *buf);
-kperf.kpc_get_thread_counters.argtypes = [C.c_uint32, C.c_uint32, C.POINTER(C.c_uint64)]
-kperf.kpc_get_thread_counters.restype = C.c_int
-
-
-def kpc_init_fixed():
-    # root permission check pattern used by kpc_demo.c
-    forced = C.c_int(0)
-    if kperf.kpc_force_all_ctrs_get(C.byref(forced)) != 0:
-        raise PermissionError("kpc permission denied; run under sudo")
-
-    if kperf.kpc_force_all_ctrs_set(1) != 0:
-        raise OSError("kpc_force_all_ctrs_set(1) failed")
-
-    if kperf.kpc_set_counting(KPC_CLASS_FIXED_MASK) != 0:
-        raise OSError("kpc_set_counting(FIXED) failed")
-
-    if kperf.kpc_set_thread_counting(KPC_CLASS_FIXED_MASK) != 0:
-        raise OSError("kpc_set_thread_counting(FIXED) failed")
-
-
-def read_fixed():
-    n = int(kperf.kpc_get_counter_count(KPC_CLASS_FIXED_MASK))
-    buf = (C.c_uint64 * n)()
-    if kperf.kpc_get_thread_counters(0, n, buf) != 0:
-        raise OSError("kpc_get_thread_counters failed")
-    return [int(buf[i]) for i in range(n)]
-
-
-def read_cycles():
-    # on Apple chips, there are 2 fixed counters (cycles, instructions): fixed[0] is cycles and fixed[1] is instructions
-    fixed = read_fixed()
-    return fixed[0]
+def read_cycles() -> int:
+    """Read CPU cycle counter via the `rdtsc` module."""
+    # the rdtsc package exposes `clock()` which returns a 64‑bit cycle count
+    return rdtsc.get_cycles()
 
 
 # ---------------------------------------------------------------------------
