@@ -1,6 +1,6 @@
 # Project: Tempo
 
-CFLAGS = -O3 -std=c99 -fPIC \
+CFLAGS = -O1 -std=c99 -fPIC \
          -Wall -Wextra -Wpedantic -Werror -Wmissing-prototypes -Wredundant-decls \
          -Iinclude -Iexternal/openssl/include -Isrc/noic
 
@@ -96,13 +96,13 @@ SAMPLENTT_OBJ = $(OBJ_SAMPLENTT_DIR)/algorithm_a0.o $(OBJ_SAMPLENTT_DIR)/algorit
 				$(OBJ_SAMPLENTT_DIR)/algorithm_c1.o
 
 # MLKEM from source to object, per KYBER_K
-$(OBJ_MLKEM512_DIR)/%.o: $(SRC_NOIC_DIR)/%.c $(HEADERS)
+$(OBJ_MLKEM512_DIR)/%.o: $(SRC_NOIC_DIR)/%.c $(HEADERS) | $(OBJ_MLKEM512_DIR)
 	$(CC) $(CFLAGS) -DKYBER_K=2 -c -o $@ $<
 
-$(OBJ_MLKEM768_DIR)/%.o: $(SRC_NOIC_DIR)/%.c $(HEADERS)
+$(OBJ_MLKEM768_DIR)/%.o: $(SRC_NOIC_DIR)/%.c $(HEADERS) | $(OBJ_MLKEM768_DIR)
 	$(CC) $(CFLAGS) -DKYBER_K=3 -c -o $@ $<
 
-$(OBJ_MLKEM1024_DIR)/%.o: $(SRC_NOIC_DIR)/%.c $(HEADERS)
+$(OBJ_MLKEM1024_DIR)/%.o: $(SRC_NOIC_DIR)/%.c $(HEADERS) | $(OBJ_MLKEM1024_DIR)
 	$(CC) $(CFLAGS) -DKYBER_K=4 -c -o $@ $<
 
 # SampleNTT from source to object
