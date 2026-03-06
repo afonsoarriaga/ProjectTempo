@@ -43,7 +43,7 @@ LIB_PATHS = [
 def read_cycles() -> int:
     """Read CPU cycle counter via the `rdtsc` module."""
     # the rdtsc package exposes `clock()` which returns a 64‑bit cycle count
-    return rdtsc.clock()
+    return rdtsc.get_cycles()
 
 
 # ---------------------------------------------------------------------------
@@ -62,8 +62,8 @@ def print_table(row_labels, col_labels, values):
     cells = [[""] * ncols for _ in range(nrows)]
     for r in range(nrows):
         for c in range(ncols):
-            m, s = values[r][c]
-            cells[r][c] = f"{m:.0f} ± {(s/m)*100:.1f}%"
+            m, rsd = values[r][c]
+            cells[r][c] = f"{m:.0f} ± {rsd:.2f}%"
 
     # compute column widths
     col_widths = []

@@ -1,4 +1,4 @@
-# How to improve accuracy of benchmarks on Debian 13 (Minimal)
+# How to improve accuracy of benchmarks on Debian 13 (minimal)
 
 ### 1. Isolate Core 3 at Boot
 
@@ -69,13 +69,19 @@ Disable it:
 echo 0 | sudo tee /sys/devices/system/cpu/cpu1/online
 ```
 
-### 4. Disable ASLR
+### 4. Disable turbo boost
+Run:
+```console
+echo 1 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
+```
+
+### 5. Disable ASLR
 Run:
 ```console
 echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
 ```
 
-### 5. Run benchmarks on isolated core 3 with the highest priority
+### 6. Run benchmarks on isolated core 3 with the highest priority
 ```console
 sudo nice -n -20 taskset -c 3 python3 main_count_cycles_x86.py
 ```
