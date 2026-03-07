@@ -1,5 +1,15 @@
 # How to improve accuracy of benchmarks on Debian 13 (minimal)
 
+Benchmark machine: Apple MacBook Air "Core i7" 1.8 13" (Mid-2011) [Specs](https://everymac.com/systems/apple/macbook-air/specs/macbook-air-core-i7-1.8-13-mid-2011-specs.html)
+
+This system supports "Turbo Boost 2.0", which "automatically increases the speed of the active cores" to improve performance when needed, and "Hyper Threading", which allows the system to recognize four total "cores" or "threads" (two real and two virtual).
+
+Processor Type:	Core i7 (I7-2677M)
+
+Processor Speed: 1.8 GHz
+
+Turbo Boost: 2.9 GHz
+
 ### 1. Isolate Core 3 at Boot
 
 Edit GRUB:
@@ -38,7 +48,7 @@ sudo apt install linux-cpupower
 
 Underclock CPU:
 ```console
-# inspect available frequencies and current governor
+# inspect available frequencies
 cpupower frequency-info
 
 # switch to manual control
@@ -75,10 +85,15 @@ Run:
 echo 1 | sudo tee /sys/devices/system/cpu/intel_pstate/no_turbo
 ```
 
-### 5. Disable ASLR
-Run:
+### 5. Temporarily disable WiFi (very important!)
+Find WiFi interface:
 ```console
-echo 0 | sudo tee /proc/sys/kernel/randomize_va_space
+ip link
+```
+
+Disable it:
+```console
+sudo ip link set wlp2s0b1 down
 ```
 
 ### 6. Run benchmarks on isolated core 3 with the highest priority

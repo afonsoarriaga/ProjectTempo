@@ -11,6 +11,7 @@ import rdtsc
 NUM_ALGOS = 5
 NUM_K = 3
 NUM_RUNS = 1000
+WARMUP_RUNS = 100
 
 KYBER_N = 256
 KYBER_Q = 3329
@@ -240,6 +241,11 @@ def pake_sanity(init_start, init_end, resp, k_idx: int, label: str, algo_label: 
 def bench_gen_matrix(gen_matrix, k: int):
     seed = bytearray(random_seed(32))
     matrix = ((C.c_int16 * KYBER_N) * 4 * 4)()
+    
+    # warmup runs
+    for _ in range(WARMUP_RUNS):
+        gen_matrix(matrix, (C.c_uint8 * 32).from_buffer(seed), 0)
+    
     samples = []
     for _ in range(NUM_RUNS):
         start = read_cycles()
@@ -261,6 +267,17 @@ def bench_kem(keypair, enc, dec, k_idx: int):
     ct  = (C.c_ubyte * ct_len)()
     ss1 = (C.c_ubyte * SS_LEN)()
     ss2 = (C.c_ubyte * SS_LEN)()
+
+    # warmup runs
+    for _ in range(WARMUP_RUNS):
+        if keypair(pk, sk) != 0:
+            raise SystemExit("keypair failed in warmup")
+        if enc(ct, ss1, pk) != 0:
+            raise SystemExit("enc failed in warmup")
+        if dec(ss2, ct, sk) != 0:
+            raise SystemExit("dec failed in warmup")
+        if bytes(ss1) != bytes(ss2):
+            raise SystemExit("shared secrets mismatch in warmup")
 
     samples = []
     for _ in range(NUM_RUNS):
@@ -299,6 +316,14 @@ def bench_pake(init_start, init_end, resp, k_idx: int):
     sk   = (C.c_ubyte * sk_len)()
     key_init = (C.c_ubyte * pw_len)()
     key_resp = (C.c_ubyte * pw_len)()
+
+    # warmup runs
+    for _ in range(WARMUP_RUNS):
+        init_start(msg1, pk, sk, pw, sid)
+        resp(key_resp, msg2, msg1, pw, sid)
+        rc = init_end(key_init, msg2, msg1, pk, sk, sid)
+        if rc != 0 or bytes(key_init) != bytes(key_resp):
+            raise SystemExit("PAKE failure during warmup")
 
     samples = []
     for _ in range(NUM_RUNS):
