@@ -11,7 +11,7 @@ import rdtsc
 NUM_ALGOS = 5
 NUM_K = 3
 NUM_RUNS = 1000
-WARMUP_RUNS = 100
+WARMUP_RUNS = 3000
 
 KYBER_N = 256
 KYBER_Q = 3329
@@ -248,6 +248,7 @@ def bench_gen_matrix(gen_matrix, k: int):
     
     samples = []
     for _ in range(NUM_RUNS):
+        seed = bytearray(random_seed(32)) #fresh seed
         start = read_cycles()
         gen_matrix(matrix, (C.c_uint8 * 32).from_buffer(seed), 0)
         end = read_cycles()
