@@ -1,6 +1,6 @@
 # Project: Tempo
 
-CFLAGS = -O1 -std=c99 -fPIC \
+CFLAGS = -O3 -std=c99 -fPIC \
          -Wall -Wextra -Wpedantic -Werror -Wmissing-prototypes -Wredundant-decls \
          -Iinclude -Iexternal/openssl/include -Isrc/noic
 
