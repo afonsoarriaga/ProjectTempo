@@ -34,25 +34,31 @@ void algorithmA1(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) 
         acceptable_d1 = lt_1mask_16(d1, KYBER_Q);
         acceptable_d2 = lt_1mask_16(d2, KYBER_Q);
         
-        flag = 0;
+        //flag = 0;
         for (uint16_t j = 0; j < KYBER_N; j++) {
                 //match = (uint16_t)(j == ctr);
                 match = eq_1mask_16(j, ctr);
-                mask = match * acceptable_d1;
-                a[j] = (a[j] * (1 - mask)) + (d1 * mask);
-                flag += mask;
+                //mask = match * acceptable_d1;
+                //a[j] = (a[j] * (1 - mask)) + (d1 * mask);
+                //flag += mask;
+                a[j] = (~match & a[j]) | (match & d1);
         }
-        ctr += flag;
+        //ctr += flag;
+        acceptable_d1 = lt_1mask_16(d1,KYBER_Q); 
+        ctr += acceptable_d1 & 1;
         
-        flag = 0;
+        //flag = 0;
         for (int j = 0; j < KYBER_N; j++) {
                 //match = (uint16_t)(j == ctr);
                 match = eq_1mask_16(j, ctr);
-                mask = match * acceptable_d2;
-                a[j] = (a[j] * (1 - mask)) + (d2 * mask);
-                flag += mask;
+                //mask = match * acceptable_d2;
+                //a[j] = (a[j] * (1 - mask)) + (d2 * mask);
+                //flag += mask;
+                a[j] = (~match & a[j]) | (match & d2);
         }
-        ctr += flag;
+        //ctr += flag;
+        acceptable_d2 = lt_1mask_16(d2,KYBER_Q); 
+        ctr += acceptable_d2 & 1;
     }
     shake128_inc_ctx_release(&state);
 }
