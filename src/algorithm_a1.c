@@ -16,7 +16,8 @@
 void algorithmA1(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) {
     uint8_t C[3];
     uint16_t ctr = 0;
-    uint16_t d1, d2, acceptable_d1, acceptable_d2, flag, match, mask;
+    //uint16_t d1, d2, acceptable_d1, acceptable_d2, flag, match, mask;
+    uint16_t d1, d2, acceptable_d1, acceptable_d2, match;
 
     shake128incctx state;
     shake128_inc_init(&state);
