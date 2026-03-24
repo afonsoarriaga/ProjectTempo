@@ -15,11 +15,13 @@ When referring to Tempo PAKE or this GitHub repository in academic literature, p
 @misc{cryptoeprint:2025/1399,
       author = {Afonso Arriaga and Manuel Barbosa and Stanislaw Jarecki},
       title = {Tempo: An {ML}-{KEM} to {PAKE} Compiler Resilient to Timing Attacks},
-      howpublished = {Cryptology {ePrint} Archive, Paper 2025/1399},
+      howpublished = {Cryptology {ePrint} Archive, Paper 2025/1399, {to appear in TCHES 2026/3}},
       year = {2025},
       url = {https://eprint.iacr.org/2025/1399}
 }
 ```
+> [!NOTE]
+> The paper will appear in TCHES 2006/3 and reference will be updated soon.
 
 ## Benchmarks on 64-bit x86 (x86_64) and ARM (aarch64)
 
@@ -121,6 +123,12 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ```
 
 For convenience, the results are available in *pqm4_results.md*.
+
+8. Compute averages and standard deviations
+```
+% cd ../..
+% for dir in external/pqm4/benchmarks/speed/crypto_kem/*/*/; do echo "Processing: $dir"; python3 pqm4_compute_avg_and_std_dev.py "$dir"; done
+```
 
 ## License
 

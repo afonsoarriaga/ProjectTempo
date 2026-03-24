@@ -321,12 +321,12 @@ def main():
             print(f"... {pake_labels[k_idx]} / {algo_names[a]}: {t:.4f} ms")
 
     # 3) Print tables
-    print("\nSampleNTT results (gen_matrix; average ms per run)\n")
-    print("Algorithm A0 : VT rejection sampling")
-    print("Algorithm A1 : CT rejection sampling")
-    print("Algorithm B0 : CT recursive division over 3200-bit integer (OpenSSL)")
-    print("Algorithm C0 : CT modular reduction over 192-bit integers (OpenSSL)")
-    print("Algorithm C1 : CT modular reduction over 192-bit integers (standalone)")
+    print("\nSampleNTT results (gen_matrix; cycles per run with RSD%)\n")
+    print("Algorithm A0 : FIPS 203")
+    print("Algorithm A1 : Fixed Loop Sampler (FLS)")
+    print("Algorithm B0 : Repeated Modular Division (RMD)")
+    print("Algorithm C0 : Single Modular Division OpenSSL")
+    print("Algorithm C1 : Single Modular Division (SMD)")
     print_table(kem_labels_gen, algo_names, samplentt_timings)
 
     print("\nKEM results (keygen+enc+dec, average ms per run)\n")
