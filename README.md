@@ -1,12 +1,11 @@
 # Project Tempo
 
-> [!NOTE]
-> This project is an artifact of [Tempo PAKE](https://eprint.iacr.org/2025/1399).
-> It benchmarks alternative specifications/implementations of the ML-KEM SampleNTT algorithm specified in [FIPS 203, Algorithm 7](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.203.pdf).
-> This project has two Git submodules: `OpenSSL` and `pqm4`.
-> Algorithms A0, A1 and C1 are self-contained. Algorithms B0 and C0 require OpenSSL.
-> Running the main python script produces the benchmarks presented in Table 1 of the paper.
-> To run the benchmarks on ARM Cortex-M4, see instructions below. Results are provided in `pqm4_results.md` and summarized in Table 2 of the paper.
+This project is an artifact of [Tempo PAKE](https://eprint.iacr.org/2025/1399).
+It benchmarks alternative specifications/implementations of the ML-KEM SampleNTT algorithm specified in [FIPS 203, Algorithm 7](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.203.pdf).
+This project has two Git submodules: `OpenSSL` and `pqm4`.
+Algorithms A0, A1 and C1 are self-contained. Algorithms B0 and C0 require OpenSSL.
+Running the main python script produces the benchmarks presented in Table 1 of the paper.
+To run the benchmarks on ARM Cortex-M4, see instructions below. Results are provided in `pqm4_results.md` and summarized in Table 2 of the paper.
 
 ## Bibliography
 
@@ -62,11 +61,11 @@ Results (on a MacBook Air M1, 2020):
 
 Average cycle count: ML-KEM runs keygen+enc+dec; NoIC runs init+resp+end.
 
-- Algorithm A0 : VT rejection sampling, following [FIPS 203, Algorithm 7](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.203.pdf) blueprint
-- Algorithm A1 : CT rejection sampling, functionally equivalent to [FIPS 203, Algorithm 7](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.203.pdf)
-- Algorithm B0 : CT recursive division with remainder over 3200-bit integer (OpenSSL required)
-- Algorithm C0 : CT modular reduction over 192-bit integers (OpenSSL required)
-- Algorithm C1 : CT modular reduction over 192-bit integers (standalone)
+- Algorithm A0 : FIPS 203
+- Algorithm A1 : Fixed Loop Sampler (FLS)
+- Algorithm B0 : Repeated Modular Division (RMD)
+- Algorithm C0 : Single Modular Division OpenSSL
+- Algorithm C1 : Single Modular Division (SMD)
 
 ## Benchmarks on ARM Cortex-M4
 
