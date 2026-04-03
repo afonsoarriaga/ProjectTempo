@@ -9,6 +9,7 @@ void algorithmA1(int16_t a[KYBER_N], const uint8_t seed[34]);
 void algorithmB0(int16_t a[KYBER_N], const uint8_t seed[34]);
 void algorithmC0(int16_t a[KYBER_N], const uint8_t seed[34]);
 void algorithmC1(int16_t a[KYBER_N], const uint8_t seed[34]);
+void oldAlgorithmB0(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]);
 uint16_t reduce192(uint32_t x[6]);
 uint16_t barrett_reduce32(uint32_t x);
 

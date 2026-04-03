@@ -244,3 +244,10 @@ copy-pakes:
 
 # keep intermediate object files; do not auto-rm them after building .so
 .SECONDARY:
+
+# Unit test for algorithmB0 vs oldAlgorithmB0
+test: test_algorithm_b0
+	./test_algorithm_b0
+
+test_algorithm_b0: test_algorithm_b0.c src/algorithm_b0.c include/algorithms.h include/config.h src/fips202.c
+	$(CC) $(CFLAGS) -o $@ test_algorithm_b0.c src/algorithm_b0.c src/fips202.c -Iinclude -lcrypto
