@@ -13,6 +13,63 @@
 #include "config.h"
 #include "fips202.h"
 
+/*
+ * Helper to precompute powers of Q: Q^128, Q^64, ..., Q^1.
+ * Returns a static array of 256 BIGNUM* (powers[0] = Q^128, ..., powers[7] = Q^1).
+ * Only computes once (lazy initialization).
+ */
+static BIGNUM **get_powers_of_q(BN_CTX *bn_ctx) {
+    static BIGNUM *powers[8] = {0};
+    static int initialized = 0;
+    if (!initialized) {
+        BIGNUM *q = BN_new();
+        BN_set_word(q, KYBER_Q);
+
+        // Compute Q^1, Q^2, Q^4, ..., Q^128
+        powers[0] = BN_new();
+        BN_copy(powers[0], q); // Q^1
+
+        for (int i = 1; i < 8; ++i) {
+            powers[i] = BN_new();
+            BN_sqr(powers[i], powers[i-1], bn_ctx); // Q^{2^i} = (Q^{2^{i-1}})^2
+        }
+        BN_free(q);
+        initialized = 1;
+    }
+    return powers;
+}
+
+/*
+ * Recursively splits x_bn into 256 coefficients < Q using powers of Q.
+ * out: pointer to output array (int16_t[256])
+ * x_bn: input BIGNUM (3200 bits)
+ * powers: array of BIGNUM* for Q^128, Q^64, ..., Q^1
+ * m_bn: BIGNUM for Q
+ * bn_ctx: BN_CTX*
+ * start: start index in out
+ * count: number of coefficients to fill
+ * depth: current depth (0 for Q^128, 1 for Q^64, ..., 7 for Q^1)
+ */
+static void split_by_powers_of_q(int16_t *out, BIGNUM *x_bn, BIGNUM **powers, BIGNUM *m_bn, BN_CTX *bn_ctx, int start, int count, int depth) {
+    if (count == 1) {
+        // Base case: number is guaranteed < Q, just extract as int16_t
+        out[start] = (int16_t)BN_get_word(x_bn);
+        return;
+    }
+    int half = count / 2;
+    BIGNUM *qpow = powers[7 - depth]; // Q^{count/2}
+    BIGNUM *quotient = BN_new();
+    BIGNUM *remainder = BN_new();
+    BN_div(quotient, remainder, x_bn, qpow, bn_ctx);
+
+    // Recursively split quotient and remainder
+    split_by_powers_of_q(out, quotient, powers, m_bn, bn_ctx, start, half, depth + 1);
+    split_by_powers_of_q(out, remainder, powers, m_bn, bn_ctx, start + half, half, depth + 1);
+
+    BN_free(quotient);
+    BN_free(remainder);
+}
+
 void algorithmB0(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) {
     uint8_t C[400]; // 400 bytes = 3200 bits
 
@@ -22,36 +79,19 @@ void algorithmB0(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) 
     shake128_inc_finalize(&state);
     shake128_inc_squeeze(C, sizeof(C), &state);
     shake128_inc_ctx_release(&state);
-    
-    // create OpenSSL BN context and numbers
+
     BN_CTX *bn_ctx = BN_CTX_new();
     BIGNUM *x_bn = BN_new();
     BIGNUM *m_bn = BN_new();
-    BIGNUM *quotient = BN_new();
-    BIGNUM *remainder = BN_new();
 
-    // set m = KYBER_Q
     BN_set_word(m_bn, KYBER_Q);
-    
-    // set x_bn from the 400-byte buffer C 
-    // (load little-endian, as other algorithms in this library)
     BN_lebin2bn(C, sizeof(C), x_bn);
 
-    for (uint16_t j = 0; j < KYBER_N; j++) {
-        // quotient = x_bn / m_bn
-        // remainder = x_bn % m_bn
-        BN_div(quotient, remainder, x_bn, m_bn, bn_ctx);
+    BIGNUM **powers = get_powers_of_q(bn_ctx);
 
-        // remainer fits in 16 bits
-        a[j] = (uint16_t)BN_get_word(remainder);
-
-        // x_bn = quotient for next iteration
-        BN_copy(x_bn, quotient);
-    }
+    split_by_powers_of_q(a, x_bn, powers, m_bn, bn_ctx, 0, KYBER_N, 0);
 
     BN_free(x_bn);
     BN_free(m_bn);
-    BN_free(quotient);
-    BN_free(remainder);
     BN_CTX_free(bn_ctx);
 }
