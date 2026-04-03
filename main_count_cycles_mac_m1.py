@@ -409,6 +409,9 @@ def main():
     kem_timings       = [[(0.0, 0.0)] * NUM_ALGOS for _ in range(NUM_K)]
     pake_timings      = [[(0.0, 0.0)] * NUM_ALGOS for _ in range(NUM_K)]
 
+    # Initialize kperf fixed counters
+    kpc_init_fixed()
+
     # 1) Sanity checks: each library exactly once
     print("Running sanity checks...")
     for k_idx in range(NUM_K):
