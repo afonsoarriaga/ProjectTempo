@@ -38,19 +38,13 @@ int main(void) {
         algorithmB0(out_new, seed);
         oldAlgorithmB0(out_old, seed);
 
-        // Reverse out_new before comparison
-        int16_t out_new_reversed[KYBER_N];
-        for (int i = 0; i < KYBER_N; ++i) {
-            out_new_reversed[i] = out_new[KYBER_N - 1 - i];
-        }
-
-        if (memcmp(out_new_reversed, out_old, sizeof(out_new_reversed)) != 0) {
+        if (memcmp(out_new, out_old, sizeof(out_new)) != 0) {
             printf("Test %d FAILED!\n", test + 1);
             failures++;
             // Optionally print the differing outputs
             for (int i = 0; i < KYBER_N; ++i) {
-                if (out_new_reversed[i] != out_old[i]) {
-                    printf("  Coeff %d: new=%d, old=%d\n", i, out_new_reversed[i], out_old[i]);
+                if (out_new[i] != out_old[i]) {
+                    printf("  Coeff %d: new=%d, old=%d\n", i, out_new[i], out_old[i]);
                 }
             }
         }
@@ -64,4 +58,3 @@ int main(void) {
         return 1;
     }
 }
-

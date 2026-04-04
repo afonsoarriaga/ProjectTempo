@@ -52,7 +52,8 @@ static BIGNUM **get_powers_of_q(BN_CTX *bn_ctx) {
 static void split_by_powers_of_q(int16_t *out, BIGNUM *x_bn, BIGNUM **powers, BN_CTX *bn_ctx, int start, int count, int depth) {
     if (count == 1) {
         // Base case: number is guaranteed < Q, just extract as int16_t
-        out[start] = (int16_t)BN_get_word(x_bn);
+        // Index is N - start - 1 because the order is reversed compared to the original RMD algorithm
+        out[KYBER_N - start - 1] = (int16_t)BN_get_word(x_bn);
         return;
     }
     int half = count / 2;
