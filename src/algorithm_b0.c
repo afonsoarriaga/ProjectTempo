@@ -44,13 +44,12 @@ static BIGNUM **get_powers_of_q(BN_CTX *bn_ctx) {
  * out: pointer to output array (int16_t[256])
  * x_bn: input BIGNUM (3200 bits)
  * powers: array of BIGNUM* for Q^128, Q^64, ..., Q^1
- * m_bn: BIGNUM for Q
  * bn_ctx: BN_CTX*
  * start: start index in out
  * count: number of coefficients to fill
  * depth: current depth (0 for Q^128, 1 for Q^64, ..., 7 for Q^1)
  */
-static void split_by_powers_of_q(int16_t *out, BIGNUM *x_bn, BIGNUM **powers, BIGNUM *m_bn, BN_CTX *bn_ctx, int start, int count, int depth) {
+static void split_by_powers_of_q(int16_t *out, BIGNUM *x_bn, BIGNUM **powers, BN_CTX *bn_ctx, int start, int count, int depth) {
     if (count == 1) {
         // Base case: number is guaranteed < Q, just extract as int16_t
         out[start] = (int16_t)BN_get_word(x_bn);
@@ -63,8 +62,8 @@ static void split_by_powers_of_q(int16_t *out, BIGNUM *x_bn, BIGNUM **powers, BI
     BN_div(quotient, remainder, x_bn, qpow, bn_ctx);
 
     // Recursively split quotient and remainder
-    split_by_powers_of_q(out, quotient, powers, m_bn, bn_ctx, start, half, depth + 1);
-    split_by_powers_of_q(out, remainder, powers, m_bn, bn_ctx, start + half, half, depth + 1);
+    split_by_powers_of_q(out, quotient, powers, bn_ctx, start, half, depth + 1);
+    split_by_powers_of_q(out, remainder, powers, bn_ctx, start + half, half, depth + 1);
 
     BN_free(quotient);
     BN_free(remainder);
@@ -89,10 +88,9 @@ void algorithmB0(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) 
 
     BIGNUM **powers = get_powers_of_q(bn_ctx);
 
-    split_by_powers_of_q(a, x_bn, powers, m_bn, bn_ctx, 0, KYBER_N, 0);
+    split_by_powers_of_q(a, x_bn, powers, bn_ctx, 0, KYBER_N, 0);
 
     BN_free(x_bn);
-    BN_free(m_bn);
     BN_CTX_free(bn_ctx);
 }
 
