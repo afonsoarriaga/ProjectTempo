@@ -51,11 +51,28 @@ static BIGNUM **get_powers_of_q(BN_CTX *bn_ctx) {
  */
 static void split_by_powers_of_q(int16_t *out, BIGNUM *x_bn, BIGNUM **powers, BN_CTX *bn_ctx, int start, int count, int depth) {
     if (count == 1) {
-        // Base case: number is guaranteed < Q, just extract as int16_t
-        // Index is N - start - 1 because the order is reversed compared to the original RMD algorithm
-        out[KYBER_N - start - 1] = (int16_t)BN_get_word(x_bn);
+        // Out index is N - start - 1 because the order is reversed compared to the original RMD algorithm
+        int out_idx = KYBER_N - start - 1;
+
+        // The original number is slightly bigger than Q^256, so the leftmost element in
+        // this recursion, which is the quotient of a quotient, etc, is still slightly
+        // larger than Q. Divide it one last time by Q
+        if (start == 0) {
+            BIGNUM *q = powers[0];
+
+            BIGNUM *quotient = BN_new();
+            BIGNUM *remainder = BN_new();
+            BN_div(quotient, remainder, x_bn, q, bn_ctx);
+            out[out_idx] = (int16_t)BN_get_word(remainder);
+            return;
+        }
+
+        // Otherwise this number is guaranteed < Q because it's a remainder of a division
+        // by Q
+        out[out_idx] = (int16_t)BN_get_word(x_bn);
         return;
     }
+
     int half = count / 2;
     BIGNUM *qpow = powers[7 - depth]; // Q^{count/2}
     BIGNUM *quotient = BN_new();

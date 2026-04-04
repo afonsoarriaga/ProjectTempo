@@ -33,7 +33,7 @@ int main(void) {
     srand((unsigned)time(NULL));
 
     // Only 1 test for debugging
-    for (int test = 0; test < 1; ++test) {
+    for (int test = 0; test < 100; ++test) {
         random_bytes(seed, sizeof(seed));
         algorithmB0(out_new, seed);
         oldAlgorithmB0(out_old, seed);
