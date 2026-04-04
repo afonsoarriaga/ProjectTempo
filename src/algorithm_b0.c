@@ -82,9 +82,7 @@ void algorithmB0(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) 
 
     BN_CTX *bn_ctx = BN_CTX_new();
     BIGNUM *x_bn = BN_new();
-    BIGNUM *m_bn = BN_new();
 
-    BN_set_word(m_bn, KYBER_Q);
     BN_lebin2bn(C, sizeof(C), x_bn);
 
     BIGNUM **powers = get_powers_of_q(bn_ctx);
