@@ -14,8 +14,8 @@
 #include "fips202.h"
 
 /*
- * Helper to precompute powers of Q: Q^128, Q^64, ..., Q^1.
- * Returns a static array of 256 BIGNUM* (powers[0] = Q^128, ..., powers[7] = Q^1).
+* Helper to precompute powers of Q: Q^1, Q^2, ..., Q^128.
+* Returns a static array of 8 BIGNUM* (powers[0] = Q^1, ..., powers[7] = Q^128).
  * Only computes once (lazy initialization).
  */
 static BIGNUM **get_powers_of_q(BN_CTX *bn_ctx) {
