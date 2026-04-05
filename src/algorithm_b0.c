@@ -28,10 +28,12 @@ static BIGNUM **get_powers_of_q(BN_CTX *bn_ctx) {
         // Compute Q^1, Q^2, Q^4, ..., Q^128
         powers[0] = BN_new();
         BN_copy(powers[0], q); // Q^1
+        BN_set_flags(powers[0], BN_FLG_CONSTTIME);
 
         for (int i = 1; i < 8; ++i) {
             powers[i] = BN_new();
             BN_sqr(powers[i], powers[i-1], bn_ctx); // Q^{2^i} = (Q^{2^{i-1}})^2
+            BN_set_flags(powers[i], BN_FLG_CONSTTIME);
         }
         BN_free(q);
         initialized = 1;
@@ -129,6 +131,7 @@ void oldAlgorithmB0(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2
 
     // set m = KYBER_Q
     BN_set_word(m_bn, KYBER_Q);
+    BN_set_flags(m_bn, BN_FLG_CONSTTIME);
 
     // set x_bn from the 400-byte buffer C
     // (load little-endian, as other algorithms in this library)
