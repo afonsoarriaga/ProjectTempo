@@ -6,10 +6,8 @@
  *              self-contained implementation using Barrett reduction           *
  ********************************************************************************/
 
-#include <string.h>
-
-#include "algorithms.h"
-#include "config.h"
+#include "samplentt.h"
+#include "params.h"
 #include "fips202.h"
 
 #define lt_1mask(x,y) (uint32_t)((((int32_t) x) - ((int32_t) y)) >> 31)  // 0xffffffffffffffff if x < y and 0 otherwise
@@ -40,8 +38,7 @@ uint16_t barrett_reduce32(uint32_t x) {
     uint32_t r;
 
     q3 = ((uint64_t)x * mu) >> 32;
-    //r = x - (uint32_t)(q3 * m);
-    r = x - (uint32_t)(q3 + (q3 << 8) + (q3 << 10) + (q3 << 11));
+    r = x - (uint32_t)(q3 * m);
 
     // while r >= m do r = r - m
     // at most 2 loops (HAC Fact 14.43) in general
@@ -74,8 +71,7 @@ uint16_t reduce192(uint32_t x[6]) {
 }
 
 void algorithmC1(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) {
-    //uint8_t C[24];
-    uint8_t buf[KYBER_N * 24];
+    uint8_t C[24];
     uint32_t x[6];
 
     shake128incctx state;
@@ -83,28 +79,17 @@ void algorithmC1(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) 
     shake128_inc_absorb(&state, extseed, KYBER_SYMBYTES + 2);
     shake128_inc_finalize(&state);
 
-    /*
     for (size_t j = 0; j < KYBER_N; j++) {
         shake128_inc_squeeze(C, sizeof(C), &state);
         
-        //for (int i = 0; i < 6; i++) {
-        //    x[i] = ( uint32_t)C[i * 4 + 0]        |
-        //           ((uint32_t)C[i * 4 + 1] << 8)  |
-        //           ((uint32_t)C[i * 4 + 2] << 16) |
-        //           ((uint32_t)C[i * 4 + 3] << 24);
-        //}
-        memcpy(x, C, 24);
+        for (int i = 0; i < 6; i++) {
+            x[i] = ( uint32_t)C[i * 4 + 0]        |
+                   ((uint32_t)C[i * 4 + 1] << 8)  |
+                   ((uint32_t)C[i * 4 + 2] << 16) |
+                   ((uint32_t)C[i * 4 + 3] << 24);
+        }
         a[j] = reduce192(x);
     }
 
     shake128_inc_ctx_release(&state);
-    */
-
-    shake128_inc_squeeze(buf, sizeof(buf), &state);
-    shake128_inc_ctx_release(&state);
-
-    for (size_t j = 0; j < KYBER_N; j++) {
-        memcpy(x, buf + j * 24, 24);
-        a[j] = reduce192(x);
-    }
 }
