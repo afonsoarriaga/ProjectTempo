@@ -111,4 +111,3 @@ void algorithmB0(int16_t a[KYBER_N], const uint8_t extseed[KYBER_SYMBYTES + 2]) 
     BN_free(x_bn);
     BN_CTX_free(bn_ctx);
 }
-

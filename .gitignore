@@ -1,4 +1,4 @@
-src/*.o
-main
+lib/*
+obj/*
 .DS_Store
 .vscode

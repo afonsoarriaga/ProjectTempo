@@ -54,8 +54,8 @@ cpupower frequency-info
 # switch to manual control
 sudo cpupower frequency-set -g userspace
 
-# pin to minimum frequency (replace 800MHz with your actual minimum from frequency-info)
-sudo cpupower frequency-set -f 800MHz
+# pin to base frequency (replace 1800MHz with your actual base frequency)
+sudo cpupower frequency-set -f 1800MHz
 
 # verify all cores show the same fixed frequency
 watch -n 1 "grep MHz /proc/cpuinfo"
