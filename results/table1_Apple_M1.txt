@@ -1,0 +1,66 @@
+SampleNTT results (gen_matrix; cycles per run with RSD%)
+
+Algorithm A0 : FIPS 203
+Algorithm A1 : Fixed Loop Sampler (FLS)
+Algorithm B0 : Repeated Modular Division (RMD)
+Algorithm C0 : Single Modular Division OpenSSL
+Algorithm C1 : Single Modular Division (SMD)
+
+                     |   Algorithm A0   |    Algorithm A1   |    Algorithm B0   |    Algorithm C0   |   Algorithm C1  
+---------------------+------------------+-------------------+-------------------+-------------------+-----------------
+MLKEM-512.gen_a      |   38254 ± 10.17% |    318113 ± 1.64% |    620431 ± 1.73% |    549947 ± 1.23% |   163841 ± 2.87%
+MLKEM-768.gen_a      |    68547 ± 5.73% |    700527 ± 2.30% |   1373770 ± 1.52% |   1226323 ± 1.40% |   351469 ± 1.52%
+MLKEM-1024.gen_a     |   111204 ± 3.80% |   1233448 ± 1.15% |   2448307 ± 1.42% |   2159317 ± 1.21% |   614735 ± 1.08%
+
+
+KEM results (keygen+enc+dec, cycles per run with RSD%)
+
+
+                     |   Algorithm A0   |    Algorithm A1   |    Algorithm B0   |    Algorithm C0   |    Algorithm C1  
+---------------------+------------------+-------------------+-------------------+-------------------+------------------
+MLKEM-512            |   254671 ± 1.63% |   1101097 ± 1.05% |   2008648 ± 1.41% |   1800035 ± 1.44% |    638562 ± 1.91%
+MLKEM-768            |   420690 ± 1.56% |   2320336 ± 0.67% |   4349995 ± 1.16% |   3899386 ± 0.65% |   1276025 ± 0.96%
+MLKEM-1024           |   642888 ± 1.39% |   4022018 ± 0.82% |   7648962 ± 0.94% |   6804327 ± 0.73% |   2167146 ± 1.00%
+
+
+PAKE results (NoIC initStart+resp+initEnd, cycles per run with RSD%)
+
+
+                     |   Algorithm A0   |    Algorithm A1   |    Algorithm B0   |    Algorithm C0   |    Algorithm C1  
+---------------------+------------------+-------------------+-------------------+-------------------+------------------
+NoIC[MLKEM-512]      |   349810 ± 1.61% |   1477387 ± 0.87% |   2686633 ± 1.30% |   2404663 ± 1.05% |    860165 ± 1.22%
+NoIC[MLKEM-768]      |   555863 ± 1.47% |   2878279 ± 0.64% |   5369086 ± 1.87% |   4807794 ± 0.97% |   1609815 ± 1.24%
+NoIC[MLKEM-1024]     |   859765 ± 1.56% |   4764805 ± 0.88% |   8981905 ± 0.64% |   8289544 ± 0.63% |   2596408 ± 0.70%
+SampleNTT results (gen_matrix; cycles per run with RSD%)
+
+Algorithm A0 : FIPS 203
+Algorithm A1 : Fixed Loop Sampler (FLS)
+Algorithm B0 : Repeated Modular Division (RMD)
+Algorithm C0 : Single Modular Division OpenSSL
+Algorithm C1 : Single Modular Division (SMD)
+
+                     |   Algorithm A0   |    Algorithm A1   |    Algorithm B0   |    Algorithm C0   |   Algorithm C1  
+---------------------+------------------+-------------------+-------------------+-------------------+-----------------
+MLKEM-512.gen_a      |   38254 ± 10.17% |    318113 ± 1.64% |    620431 ± 1.73% |    549947 ± 1.23% |   163841 ± 2.87%
+MLKEM-768.gen_a      |    68547 ± 5.73% |    700527 ± 2.30% |   1373770 ± 1.52% |   1226323 ± 1.40% |   351469 ± 1.52%
+MLKEM-1024.gen_a     |   111204 ± 3.80% |   1233448 ± 1.15% |   2448307 ± 1.42% |   2159317 ± 1.21% |   614735 ± 1.08%
+
+
+KEM results (keygen+enc+dec, cycles per run with RSD%)
+
+
+                     |   Algorithm A0   |    Algorithm A1   |    Algorithm B0   |    Algorithm C0   |    Algorithm C1  
+---------------------+------------------+-------------------+-------------------+-------------------+------------------
+MLKEM-512            |   254671 ± 1.63% |   1101097 ± 1.05% |   2008648 ± 1.41% |   1800035 ± 1.44% |    638562 ± 1.91%
+MLKEM-768            |   420690 ± 1.56% |   2320336 ± 0.67% |   4349995 ± 1.16% |   3899386 ± 0.65% |   1276025 ± 0.96%
+MLKEM-1024           |   642888 ± 1.39% |   4022018 ± 0.82% |   7648962 ± 0.94% |   6804327 ± 0.73% |   2167146 ± 1.00%
+
+
+PAKE results (NoIC initStart+resp+initEnd, cycles per run with RSD%)
+
+
+                     |   Algorithm A0   |    Algorithm A1   |    Algorithm B0   |    Algorithm C0   |    Algorithm C1  
+---------------------+------------------+-------------------+-------------------+-------------------+------------------
+NoIC[MLKEM-512]      |   349810 ± 1.61% |   1477387 ± 0.87% |   2686633 ± 1.30% |   2404663 ± 1.05% |    860165 ± 1.22%
+NoIC[MLKEM-768]      |   555863 ± 1.47% |   2878279 ± 0.64% |   5369086 ± 1.87% |   4807794 ± 0.97% |   1609815 ± 1.24%
+NoIC[MLKEM-1024]     |   859765 ± 1.56% |   4764805 ± 0.88% |   8981905 ± 0.64% |   8289544 ± 0.63% |   2596408 ± 0.70%

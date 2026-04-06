@@ -5,7 +5,7 @@ It benchmarks alternative specifications/implementations of the ML-KEM SampleNTT
 This project has two Git submodules: `OpenSSL` and `pqm4`.
 Algorithms A0, A1 and C1 are self-contained. Algorithms B0 and C0 require OpenSSL.
 Running the main python script produces the benchmarks presented in Table 1 of the paper.
-To run the benchmarks on ARM Cortex-M4, see instructions below. Results are provided in `pqm4_results.md` and summarized in Table 2 of the paper.
+To run the benchmarks on ARM Cortex-M4, see instructions below. Results are provided in `results/pqm4_Nucleo_L4R5ZI.md` and summarized in Table 2 of the paper.
 
 ## Bibliography
 
@@ -47,17 +47,17 @@ Results (on a MacBook Air M1, 2020):
 
 |                  |  Algorithm A0  |   Algorithm A1   |    Algorithm B0   |   Algorithm C0   |   Algorithm C1   |
 |------------------|---------------:|-----------------:|------------------:|-----------------:|-----------------:|
-| MLKEM-512.gen_a  |      0.0077 ms |        0.4504 ms |         0.7837 ms |        0.1710 ms |        0.0609 ms |
-| MLKEM-768.gen_a  |      0.0146 ms |        1.0075 ms |         1.7718 ms |        0.4481 ms |        0.1342 ms |
-| MLKEM-1024.gen_a |      0.0261 ms |        1.7997 ms |         3.1335 ms |        0.6843 ms |        0.2382 ms |
+| MLKEM-512.gen_a  |      0.0095 ms |        0.1026 ms |         0.2218 ms |        0.2036 ms |        0.0486 ms |
+| MLKEM-768.gen_a  |      0.0145 ms |        0.2165 ms |         0.4899 ms |        0.4116 ms |        0.1127 ms |
+| MLKEM-1024.gen_a |      0.0248 ms |        0.3826 ms |         0.8764 ms |        0.6736 ms |        0.1898 ms |
 |                  |                |                  |                   |                  |                  |
-| MLKEM-512        |      0.0902 ms |        1.4328 ms |         2.4261 ms |        0.5813 ms |        0.2454 ms |
-| MLKEM-768        |      0.1485 ms |        3.1401 ms |         5.4544 ms |        1.2506 ms |        0.5001 ms |
-| MLKEM-1024       |      0.2266 ms |        5.5491 ms |         9.7576 ms |        2.1966 ms |        0.8483 ms |
+| MLKEM-512        |      0.0769 ms |        0.3423 ms |         0.7258 ms |        0.6055 ms |        0.1968 ms |
+| MLKEM-768        |      0.1289 ms |        0.7261 ms |         1.5547 ms |        1.2223 ms |        0.3968 ms |
+| MLKEM-1024       |      0.1987 ms |        1.2583 ms |         2.7466 ms |        2.1382 ms |        0.6808 ms |
 |                  |                |                  |                   |                  |                  |
-| NoIC[MLKEM-512]  |      0.1248 ms |        1.9081 ms |         3.2615 ms |        0.7846 ms |        0.3319 ms |
-| NoIC[MLKEM-768]  |      0.1965 ms |        3.8854 ms |         6.6772 ms |        1.6083 ms |        0.6232 ms |
-| NoIC[MLKEM-1024] |      0.2871 ms |        6.6271 ms |        11.2986 ms |        2.5864 ms |        1.0233 ms |
+| NoIC[MLKEM-512]  |      0.1076 ms |        0.4596 ms |         0.9711 ms |        0.7556 ms |        0.2668 ms |
+| NoIC[MLKEM-768]  |      0.1716 ms |        0.8982 ms |         1.9324 ms |        1.5150 ms |        0.5006 ms |
+| NoIC[MLKEM-1024] |      0.2582 ms |        1.4960 ms |         3.2376 ms |        2.5611 ms |        0.8161 ms |
 
 Average cycle count: ML-KEM runs keygen+enc+dec; NoIC runs init+resp+end.
 
@@ -111,7 +111,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 ```
 7. Run benchmarks with 100 iterations
 ```console
-% python3 benchmarks.py -p nucleo-l4r5zi -u /dev/tty.usbmodem1103 -i 100 \
+% python3 benchmarks.py -p nucleo-l4r5zi -u /dev/tty.usbmodem1103 -i 100 --no-stack \
     ml-kem-512 ml-kem-768 ml-kem-1024 \
     noic-a0-mlkem512 noic-a0-mlkem768 noic-a0-mlkem1024 \
     noic-a1-mlkem512 noic-a1-mlkem768 noic-a1-mlkem1024 \
@@ -121,7 +121,7 @@ warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 % python3 convert_benchmarks.py md
 ```
 
-For convenience, the results are available in *pqm4_results.md*.
+For convenience, the results are available in *results/pqm4_Nucleo_L4R5ZI.md*.
 
 8. Compute averages and standard deviations
 ```

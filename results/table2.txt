@@ -1,0 +1,68 @@
+### branch main ###
+
+for dir in external/pqm4/benchmarks/speed/crypto_kem/*/*/; do echo "Processing: $dir"; python3 pqm4_compute_avg_and_std_dev.py "$dir"; done
+
+Processing: external/pqm4/benchmarks/speed/crypto_kem/noic-a1-mlkem512/ref/
+keypair: 21864461.51 +- 16.84 (n=100)
+encaps: 22323521.35 +- 18.57 (n=100)
+decaps: 15290858.07 +- 11.15 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/noic-a1-mlkem768/ref/
+keypair: 43473334.84 +- 18.85 (n=100)
+encaps: 44099761.58 +- 19.97 (n=100)
+decaps: 33534883.00 +- 1.65 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/noic-a1-mlkem1024/ref/
+keypair: 72215746.66 +- 17.18 (n=100)
+encaps: 73019487.76 +- 18.46 (n=100)
+decaps: 58912525.87 +- 20.50 (n=100)
+
+Processing: external/pqm4/benchmarks/speed/crypto_kem/tempo-a1-mlkem512/ref/
+keypair: 7811197.32 +- 1896.39 (n=100)
+encaps: 8270247.54 +- 1902.05 (n=100)
+decaps: 1247948.94 +- 1898.26 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/tempo-a1-mlkem768/ref/
+keypair: 11854589.51 +- 1927.86 (n=100)
+encaps: 12480987.15 +- 1922.23 (n=100)
+decaps: 1936396.06 +- 1924.16 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/tempo-a1-mlkem1024/ref/
+keypair: 16023652.15 +- 4662.90 (n=100)
+encaps: 16827413.11 +- 4668.43 (n=100)
+decaps: 2740706.84 +- 4671.43 (n=100)
+
+Processing: external/pqm4/benchmarks/speed/crypto_kem/noic-c1-mlkem512/ref/
+keypair: 3247443.71 +- 15.58 (n=100)
+encaps: 3706499.74 +- 16.53 (n=100)
+decaps: 2879508.63 +- 14.76 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/noic-c1-mlkem768/ref/
+keypair: 6239288.01 +- 18.85 (n=100)
+encaps: 6865687.53 +- 19.57 (n=100)
+decaps: 5609324.37 +- 19.19 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/noic-c1-mlkem1024/ref/
+keypair: 10159019.16 +- 19.01 (n=100)
+encaps: 10962759.31 +- 18.29 (n=100)
+decaps: 9267135.53 +- 19.20 (n=100)
+
+Processing: external/pqm4/benchmarks/speed/crypto_kem/tempo-c1-mlkem512/ref/
+keypair: 1605497.89 +- 1917.38 (n=100)
+encaps: 2064549.60 +- 1914.63 (n=100)
+decaps: 1247926.44 +- 1914.90 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/tempo-c1-mlkem768/ref/
+keypair: 2546708.68 +- 3220.33 (n=100)
+encaps: 3173110.35 +- 3225.93 (n=100)
+decaps: 1937036.75 +- 3220.05 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/tempo-c1-mlkem1024/ref/
+keypair: 3612552.75 +- 4619.97 (n=100)
+encaps: 4416318.06 +- 4622.15 (n=100)
+decaps: 2740962.39 +- 4621.07 (n=100)
+
+Processing: external/pqm4/benchmarks/speed/crypto_kem/ml-kem-512/clean/
+keypair: 596338.19 +- 2209.18 (n=100)
+encaps: 701145.83 +- 2209.57 (n=100)
+decaps: 889194.51 +- 2209.64 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/ml-kem-768/clean/
+keypair: 987580.27 +- 3244.37 (n=100)
+encaps: 1137080.23 +- 3244.22 (n=100)
+decaps: 1386841.87 +- 3245.35 (n=100)
+Processing: external/pqm4/benchmarks/speed/crypto_kem/ml-kem-1024/clean/
+keypair: 1536966.86 +- 2874.32 (n=100)
+encaps: 1708715.47 +- 2878.44 (n=100)
+decaps: 2020960.11 +- 2879.32 (n=100)
