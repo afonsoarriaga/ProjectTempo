@@ -20,7 +20,7 @@ When referring to Tempo PAKE or this GitHub repository in academic literature, p
 }
 ```
 > [!NOTE]
-> The paper will appear in TCHES 2006/3 and reference will be updated soon.
+> The paper will appear in TCHES 2026/3 and reference will be updated soon.
 
 ## Benchmarks on 64-bit x86 (x86_64) and ARM (aarch64)
 
@@ -40,6 +40,9 @@ If you have a Mac M1, you can measure CPU cycles (instead of elapsed millisecond
 
 If you have a Linux OS running on x86, use the following command:
 ```console
+% python3 -m venv venv
+% source venv/bin/activate
+% pip install -r requirements.txt
 % python3 main_count_cycles_x86.py
 ```
 
